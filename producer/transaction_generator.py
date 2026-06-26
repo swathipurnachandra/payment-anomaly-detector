@@ -1,8 +1,9 @@
 import random
-import datetime
 import uuid
+from datetime import datetime
 from producer.merchants import MERCHANTS
 from producer.locations import CITIES
+from producer.anomalies import should_inject_anomaly
 from producer.users import users
 
 def generate_transaction():
@@ -31,5 +32,10 @@ def generate_transaction():
 
         "timestamp": datetime.now().isoformat()
     }
+
+    if should_inject_anomaly():
+        transaction["is_anomaly"] = True
+        transaction["anomaly_reason"] = "Amount Spike"
+        transaction["amount"] = user["average_amount"] * random.randint(10, 25)
 
     return transaction
