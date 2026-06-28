@@ -21,7 +21,7 @@ def inject_anomaly(transaction, user):
 
     if anomaly == "Amount Spike":
         transaction.amount = (
-            user["average_amount"] * random.randint(10, 25)
+            user.average_amount * random.randint(10, 25)
         )
 
     elif anomaly == "Location Change":
@@ -29,7 +29,7 @@ def inject_anomaly(transaction, user):
         other_cities = [
             city
             for city in CITIES
-            if city != user["home_city"]
+            if city != user.home_city
         ]
 
         transaction.city = random.choice(other_cities)
@@ -39,7 +39,7 @@ def inject_anomaly(transaction, user):
         other_methods = [
             method
             for method in PAYMENT_METHODS
-            if method != user["preferred_payment"]
+            if method != user.preferred_payment
         ]
 
         transaction.payment_method = random.choice(other_methods)
