@@ -1,4 +1,5 @@
 from kafka import KafkaConsumer
+from redis_store.state_manager import process_transaction
 import json
 
 consumer = KafkaConsumer(
@@ -11,4 +12,15 @@ consumer = KafkaConsumer(
 print("Consumer started...\n")
 
 for message in consumer:
-    print("Received:", message.value)
+
+    transaction = message.value
+
+    state = process_transaction(transaction)
+
+    print()
+
+    print(transaction)
+
+    print(state)
+
+    print("-" * 60)
