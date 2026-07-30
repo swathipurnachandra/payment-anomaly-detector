@@ -1,6 +1,7 @@
 from kafka import KafkaConsumer
 from redis_store.state_manager import process_transaction
 import json
+from detector.detector import detect
 
 consumer = KafkaConsumer(
     "payment-transactions",
@@ -14,10 +15,9 @@ print("Consumer started...\n")
 for message in consumer:
 
     transaction = message.value
-
     state = process_transaction(transaction)
+    result = detect(transaction)
 
-    print()
 
     print(transaction)
 

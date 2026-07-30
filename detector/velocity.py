@@ -1,19 +1,32 @@
-from redis_store.user_state import get_user_state
-
+from redis_store.velocity_store import (
+    add_transaction,
+    remove_old_transactions,
+    get_recent_transaction_count,
+)
 
 VELOCITY_THRESHOLD = 5
 
 
-def check_velocity(user_id: int):
+def check_velocity(transaction):
     """
     Returns:
         (is_anomaly, reason)
     """
 
-    state = get_user_state(user_id)
+    user_id = transaction["user_id"]
+    transaction_id = transaction["transaction_id"]
+    event_time = transaction["event_time"]
 
-    count = int(state["transaction_count"])
+    #Store this transaction
+    add_transaction(user_id, transaction_id, event_time)
 
+    #Remove transactions older than 60 seconds
+    remove_old_transactions(user_id, event_time)
+
+    #Count remaining transactions
+    count = get_recent_transaction_count(user_id)
+
+    #Decide
     if count > VELOCITY_THRESHOLD:
         return True, "Velocity"
 
