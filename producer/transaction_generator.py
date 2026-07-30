@@ -12,9 +12,14 @@ from producer.users import users
 from shared.schemas import Transaction
 
 
+
 def generate_transaction() -> Transaction:
 
     user = random.choice(users)
+    now = datetime.now()
+    timestamp = now.isoformat()
+    event_time= int(now.timestamp())
+
 
     amount = round(
         random.uniform(
@@ -31,7 +36,10 @@ def generate_transaction() -> Transaction:
         merchant=random.choice(user.favorite_merchants),
         city=user.home_city,
         payment_method=user.preferred_payment,
-        timestamp=datetime.now().isoformat(),
+        timestamp=timestamp,
+        event_time=event_time,
+        is_anomaly=False,
+        anomaly_reason=None
     )
 
     if should_inject_anomaly():

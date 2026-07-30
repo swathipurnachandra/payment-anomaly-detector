@@ -20,6 +20,7 @@ class Transaction:
     city: str
     payment_method: str
     timestamp: str
+    event_time: int
 
     is_anomaly: bool = False
     anomaly_reason: Optional[str] = None
