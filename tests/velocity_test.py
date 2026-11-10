@@ -1,15 +1,20 @@
+import time
+import uuid
+
 from detector.velocity import check_velocity
-from redis_store.user_state import (
-    create_user_state,
-    increment_transaction_count,
-)
-from producer.users import users
+from redis_store.redis_client import redis_client
 
-user = users[0]
 
-create_user_state(user)
+USER_ID = 999
+
+
+redis_client.delete(f"velocity:{USER_ID}")
 
 for _ in range(6):
-    increment_transaction_count(user.user_id)
+    transaction = {
+        "user_id": USER_ID,
+        "transaction_id": str(uuid.uuid4()),
+        "event_time": int(time.time()),
+    }
 
-print(check_velocity(user.user_id))
+    print(check_velocity(transaction))
