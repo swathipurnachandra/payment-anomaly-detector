@@ -20,6 +20,13 @@ def create_user_state(user: UserProfile):
         },
     )
 
+def get_average_amount(user_id: int) -> float:
+    state = get_user_state(user_id)
+
+    if not state:
+        raise ValueError(f"No Redis state found for user {user_id}")
+
+    return float(state["average_amount"])
 
 def user_exists(user_id: int):
 

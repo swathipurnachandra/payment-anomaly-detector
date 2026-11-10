@@ -13,14 +13,15 @@ consumer = KafkaConsumer(
 print("Consumer started...\n")
 
 for message in consumer:
-
     transaction = message.value
+
     state = process_transaction(transaction)
     result = detect(transaction)
 
+    transaction["detected_anomaly"] = result["is_anomaly"]
+    transaction["detected_reasons"] = result["reasons"]
 
     print(transaction)
-
     print(state)
-
+    print(result)
     print("-" * 60)

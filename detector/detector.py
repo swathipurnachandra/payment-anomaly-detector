@@ -1,14 +1,21 @@
+from detector.amount_spike import check_amount_spike
 from detector.velocity import check_velocity
 
 
-def detect(transaction):
-    """
-    Runs all fraud detection rules.
-    """
+def detect(transaction: dict) -> dict:
+    reasons = []
 
-    is_anomaly, reason = check_velocity(transaction["user_id"])
+    velocity_anomaly, velocity_reason = check_velocity(transaction)
+
+    if velocity_anomaly and velocity_reason:
+        reasons.append(velocity_reason)
+
+    amount_anomaly, amount_reason = check_amount_spike(transaction)
+
+    if amount_anomaly and amount_reason:
+        reasons.append(amount_reason)
 
     return {
-        "is_anomaly": is_anomaly,
-        "reason": reason,
+        "is_anomaly": bool(reasons),
+        "reasons": reasons,
     }
