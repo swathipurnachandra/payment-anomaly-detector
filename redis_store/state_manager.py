@@ -10,19 +10,24 @@ from redis_store.user_state import (
 )
 
 
-def process_transaction(transaction):
+def ensure_user_state(user_id: int) -> None:
+    if user_exists(user_id):
+        return
 
+    user = next(
+        (user for user in users if user.user_id == user_id),
+        None,
+    )
+    if user is None:
+        raise ValueError(f"Unknown user ID: {user_id}")
+
+    create_user_state(user)
+
+
+def process_transaction(transaction):
     user_id = transaction["user_id"]
 
-    if not user_exists(user_id):
-
-        user = next(
-            user
-            for user in users
-            if user.user_id == user_id
-        )
-
-        create_user_state(user)
+    ensure_user_state(user_id)
 
     increment_transaction_count(user_id)
 

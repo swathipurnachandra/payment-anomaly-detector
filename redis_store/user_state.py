@@ -63,3 +63,10 @@ def update_last_seen(user_id: int, timestamp: str):
 def get_user_state(user_id: int):
 
     return redis_client.hgetall(get_key(user_id))
+
+def get_last_city(user_id: int) -> str | None:
+    return redis_client.hget(get_key(user_id), "last_city")
+
+
+def get_last_seen(user_id: int) -> str | None:
+    return redis_client.hget(get_key(user_id), "last_seen")

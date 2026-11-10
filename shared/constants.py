@@ -53,3 +53,7 @@ ANOMALY_TYPES = [
     "Unknown Merchant",
     "Odd Hour Transaction",
 ]
+
+ODD_HOUR_START = 0
+ODD_HOUR_END = 5
+HIGH_VALUE_MULTIPLIER = 3

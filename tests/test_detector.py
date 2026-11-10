@@ -14,6 +14,8 @@ def test_normal_transaction():
         "transaction_id": "normal-transaction",
         "event_time": 1_000_000,
         "amount": user.average_amount,
+        "city": user.home_city,
+        "timestamp": "1970-01-12T13:46:40",
     }
 
     result = detect(transaction)
@@ -33,6 +35,8 @@ def test_amount_spike_transaction():
         "transaction_id": "spike-transaction",
         "event_time": 1_000_001,
         "amount": user.average_amount * 4,
+        "city": user.home_city,
+        "timestamp": "1970-01-12T13:46:41",
     }
 
     result = detect(transaction)

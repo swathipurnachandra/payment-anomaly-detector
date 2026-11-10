@@ -1,4 +1,5 @@
 import random
+from datetime import datetime
 
 from shared.constants import (
     ANOMALY_TYPES,
@@ -49,10 +50,10 @@ def inject_anomaly(transaction, user):
         transaction.merchant = UNKNOWN_MERCHANT
 
     elif anomaly == "Odd Hour Transaction":
+        dt = datetime.fromisoformat(transaction.timestamp)
+        dt = dt.replace(hour=3, minute=17, second=42, microsecond=0)
 
-        transaction.timestamp = (
-            transaction.timestamp.split("T")[0]
-            + "T03:17:42"
-        )
+        transaction.timestamp = dt.isoformat()
+        transaction.event_time = int(dt.timestamp())
 
     return transaction
